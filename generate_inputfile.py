@@ -7,7 +7,7 @@ transcriptions = [random_transcription(timings) for i in range(400)]
 
 print('# Auto-generated input file. This is not real data.')
 print('# The following timings were used to generate this:')
-print('#'
+print('#')
 for (i, timing) in enumerate(timings):
     print('# %s: %f' % (nth_codon(i), timing))
 print('')
