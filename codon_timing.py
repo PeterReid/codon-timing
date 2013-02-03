@@ -78,9 +78,9 @@ def iter_transcriptions(lines):
                 bases = match.group(2)
                 yield Transcription(bases, time)
             except ValueError:
-                raise Exception('Invalid number on line %d' % line_no)
+                raise Exception('Invalid number on line %d' % (line_no+1))
         else:
-            raise Exception('Could not parse line %d. Expected "<TIME> <CODONS>", where CODONS is made of AUCG.' % line_no)
+            raise Exception('Could not parse line %d. Expected "<TIME> <CODONS>", where CODONS is made of AUCG.' % (line_no+1))
 
 if __name__ == '__main__':
     solution_timings = solve(iter_transcriptions(sys.stdin.readlines()))
