@@ -10,7 +10,7 @@ The idea is that maybe different codons take different amounts of time to transc
 
 This makes two assumptions:
 
-* Each codon takes a constant amount of time to transcribe.
+* Each codon of the same type takes a constant amount of time to transcribe.
 
 * The time to transcribe a sequence of codons is the sum of the times to transcribe its individual codons.
 
