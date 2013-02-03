@@ -32,6 +32,28 @@ class Transcription:
         self.bases = bases
         self.time = time
         
+# The central idea here is that we can represent this as a matrix multiplication:
+#
+#                   # of codons
+#                 ________|_______
+#               /                 \
+#
+#            /  | N N N N N N N N |   |T|    |S|
+#           |   | N N N N N N N N |   |T|    |S|
+# # of runs |   | N N N N N N N N | x |T|  = |S|
+#           |   | N N N N N N N N |   |T|    |S|
+#            \  | N N N N N N N N |   |T|    |S|
+#                                     |T|
+#                                     |T|
+#                                     |T|
+# Where Nij = How many times the j'th type of codon occurs in the i'th run
+#       Tj  = Time to transcribe the j'th type of codon
+#       Si  = Time that the i'th run ran for
+#
+# Each S is the sum of the product of counts with the corresponding times.
+#
+# N and S are known. T is not. Fortunately, numpy solves that sort of problem,
+# finding the lowest-error solution.
 def solve(transcriptions):
     count_matrix = []
     timing_vector = []
@@ -40,6 +62,7 @@ def solve(transcriptions):
         count_matrix.append(codon_counts(transcription.bases))
     return numpy.linalg.lstsq(count_matrix, timing_vector)[0]
 
+# Turn some lines into some Transcriptions
 def iter_transcriptions(lines):
     pattern = re.compile(r'^([\d.]+)\s+([AUCG]*)$')
     
