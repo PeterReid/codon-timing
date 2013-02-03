@@ -1,4 +1,4 @@
-from codon_timing import codon_number, codon_counts, Transcription, iter_codons, solve, iter_transcriptions
+from codon_timing import codon_number, codon_counts, Translation, iter_codons, solve, iter_translations
 import unittest
 import random
 
@@ -23,23 +23,23 @@ def random_whole_codons():
     length = random.randint(40, 70)*3
     return ''.join([random_base() for i in range(length)])
 
-def random_transcription(timings):
+def random_translation(timings):
     bases = random_whole_codons()
     time = 0
     for codon in iter_codons(bases):
         time += timings[codon_number[codon]]
-    return Transcription(bases, time)
+    return Translation(bases, time)
 
 class TestComplete(unittest.TestCase):
     def test_whole(self):
         timings = [random.uniform(0, 6) for i in range(64)]
-        transcriptions = [random_transcription(timings) for i in range(400)]
-        result = solve(transcriptions)
+        translations = [random_translation(timings) for i in range(400)]
+        result = solve(translations)
         for expected, actual in zip(timings, result):
             self.assertAlmostEqual(expected, actual)
 
 def run_parser(lines):
-    return [x for x in iter_transcriptions(lines)]
+    return [x for x in iter_translations(lines)]
             
 class TestParse(unittest.TestCase):
     def test_normal(self):

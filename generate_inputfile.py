@@ -1,9 +1,9 @@
 import random
-from test import random_transcription
+from test import random_translation
 from codon_timing import nth_codon
 
 timings = [random.uniform(0, 6) for i in range(64)]
-transcriptions = [random_transcription(timings) for i in range(400)]
+transcriptions = [random_translation(timings) for i in range(400)]
 
 print('# Auto-generated input file. This is not real data.')
 print('# The following timings were used to generate this:')
@@ -13,5 +13,5 @@ for (i, timing) in enumerate(timings):
 print('')
 
 for i in range(400):
-    t = random_transcription(timings)
+    t = random_translation(timings)
     print('%f %s' % (t.time, t.bases))

@@ -25,9 +25,9 @@ def codon_counts(bases):
         counts[codon_number[codon]] += 1
     return counts
 
-class Transcription:
-    # time: how long it took to transcribe
-    # bases: base pairs transcribed
+class Translation:
+    # time: how long it took to translate
+    # bases: base pairs translated
     def __init__(self, bases, time):
         self.bases = bases
         self.time = time
@@ -47,23 +47,23 @@ class Transcription:
 #                                     |T|
 #                                     |T|
 # Where Nij = How many times the j'th type of codon occurs in the i'th run
-#       Tj  = Time to transcribe the j'th type of codon
+#       Tj  = Time to translate the j'th type of codon
 #       Si  = Time that the i'th run ran for
 #
 # Each S is the sum of the product of counts with the corresponding times.
 #
 # N and S are known. T is not. Fortunately, numpy solves that sort of problem,
 # finding the lowest-error solution.
-def solve(transcriptions):
+def solve(translations):
     count_matrix = []
     timing_vector = []
-    for transcription in transcriptions:
-        timing_vector.append(transcription.time)
-        count_matrix.append(codon_counts(transcription.bases))
+    for translation in translations:
+        timing_vector.append(translation.time)
+        count_matrix.append(codon_counts(translation.bases))
     return numpy.linalg.lstsq(count_matrix, timing_vector)[0]
 
-# Turn some lines into some Transcriptions
-def iter_transcriptions(lines):
+# Turn some lines into some Translations
+def iter_translations(lines):
     pattern = re.compile(r'^([\d.]+)\s+([AUCG]*)$')
     
     for (line_no, line) in enumerate(lines):
@@ -76,13 +76,13 @@ def iter_transcriptions(lines):
             try:
                 time = float(match.group(1))
                 bases = match.group(2)
-                yield Transcription(bases, time)
+                yield Translation(bases, time)
             except ValueError:
                 raise Exception('Invalid number on line %d' % (line_no+1))
         else:
             raise Exception('Could not parse line %d. Expected "<TIME> <CODONS>", where CODONS is made of AUCG.' % (line_no+1))
 
 if __name__ == '__main__':
-    solution_timings = solve(iter_transcriptions(sys.stdin.readlines()))
+    solution_timings = solve(iter_translations(sys.stdin.readlines()))
     for (codon_number, time) in enumerate(solution_timings):
         print('%s %f' % (nth_codon(codon_number), time))
